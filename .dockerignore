@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+*.pyo
+docker rm fastapi-container

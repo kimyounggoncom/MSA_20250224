@@ -1,8 +1,36 @@
-version: "3.12.7"
+
 
 services:
-  fastapi:
-    build: .
+  backend:
+    build:
+      context: .  # ✅ 빌드할 디렉토리 지정 (`.` = 현재 폴더)
+      dockerfile: Dockerfile  # ✅ 사용할 Dockerfile 명확하게 지정
+    image: my-fastapi-app  # ✅ 빌드된 이미지를 사용하여 중복 방지
+    container_name: backend
+    restart: always
     ports:
       - "8000:8000"
-    container_name: fastapi-container
+    depends_on:
+      - database
+    env_file:
+      - .env
+    volumes:
+      - .:/app  # ✅ FastAPI 코드가 실시간 반영되도록 수정
+    working_dir: /app  # ✅ 컨테이너 내 작업 디렉토리 설정
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]  # ✅ FastAPI 서버 자동 실행 추가
+  
+  database:
+    image: postgres:15
+    container_name: database
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # ✅ PostgreSQL 데이터 저장용 볼륨
+
+volumes:
+  postgres_data:  # ✅ PostgreSQL 데이터 저장용 볼륨 유지

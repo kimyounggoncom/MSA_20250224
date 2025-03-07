@@ -1,0 +1,12 @@
+#docker ps 
+#docker ps -a
+#docker images
+#docker start backend 
+#docker start database
+#docker compose up
+#docker exec -it backend bash  백엔드 컨테이너 내부로 들어가기 
+#docker exec -it database psql -U myuser -d mydatabase 컨테이너 내부에서 PostgreSQL 실행
+#docker compose logs backend 도커 컴포즈에서 도커 안을 바라보는거 
+#python -m uvicorn main:app --reload
+#docker docker compose build --no-cache
+#docker compose logs --tail=500 -f backend

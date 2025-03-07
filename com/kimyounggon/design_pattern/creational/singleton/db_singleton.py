@@ -1,6 +1,5 @@
 import os
 from threading import Lock
-
 from dotenv import load_dotenv
 
 
@@ -18,6 +17,7 @@ class DataBaseSingleton:
                 if not cls._instance:
                     cls._instance = super().__new__(cls)
                     cls._instance._initialize()
+    
         return cls._instance
 
     def _initialize(self):
@@ -29,6 +29,8 @@ class DataBaseSingleton:
         self.db_database = os.getenv("DB_DATABASE")
         self.db_charset = os.getenv("DB_CHARSET", "utf8mb4")
 
+
+
         # 환경 변수 디버깅
         print(f"🔹 Loaded Config - DB_HOSTNAME: {self.db_hostname}, DB_USERNAME: {self.db_username}, DB_DATABASE: {self.db_database}")
 
@@ -36,10 +38,9 @@ class DataBaseSingleton:
         if None in (self.db_hostname, self.db_username, self.db_password, self.db_database):
             raise ValueError("⚠️ Database 환경 변수가 설정되지 않았습니다.")
 
-        # ✅ PostgreSQL에 맞는 URL 형식
-        self.db_url = f"postgresql+asyncpg://{self.db_username}:{self.db_password}@{self.db_hostname}:{self.db_port}/{self.db_database}"
-
-        print(f"✅ Database URL: {self.db_url}")  # 디버깅 출력
+       # ✅ PostgreSQL에 맞는 URL 형식
+        self.db_url = f"postgresql://{self.db_username}:{self.db_password}@{self.db_hostname}:{self.db_port}/{self.db_database}"
+        print(f"✅ Database URL: {self.db_url}")  # 디버깅 출력SE: {self.db_database}")
 
 # ✅ 싱글톤 인스턴스 생성
 db_singleton = DataBaseSingleton()
